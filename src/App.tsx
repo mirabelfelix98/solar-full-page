@@ -15,24 +15,31 @@ export default function App() {
   const heroImgRef = useRef<HTMLImageElement>(null);
   const parallaxRef = useRef({ mouseX: 0, mouseY: 0, currentX: 0, currentY: 0 });
 
-  // Handle Scroll
+  // Handle Scroll (Throttled)
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80);
-      
-      // Active Section Highlighting
-      const sections = ['hero', 'problem', 'solution', 'products', 'feature', 'testimonials', 'cta', 'trust', 'cac', 'guarantee'];
-      let current = 'hero';
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 200) {
-            current = sectionId;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 80);
+          
+          // Active Section Highlighting
+          const sections = ['hero', 'problem', 'solution', 'products', 'feature', 'testimonials', 'cta', 'trust', 'cac', 'guarantee'];
+          let current = 'hero';
+          for (const sectionId of sections) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              if (rect.top <= 200) {
+                current = sectionId;
+              }
+            }
           }
-        }
+          setActiveSection(current);
+          ticking = false;
+        });
+        ticking = true;
       }
-      setActiveSection(current);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -66,6 +73,9 @@ export default function App() {
               }
             }, 16);
           }
+          
+          // Stop observing once revealed
+          revealObserver.unobserve(entry.target);
         }
       });
     }, observerOptions);
@@ -173,6 +183,8 @@ export default function App() {
             src="https://raw.githubusercontent.com/mirabelfelix98/My-workflow/main/IMG-20260314-WA0027.jpg" 
             alt="Solar Equipment" 
             className="w-full h-full object-cover animate-[heroZoom_8s_ease-out_forwards]"
+            fetchPriority="high"
+            decoding="async"
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,8,4,0.65)] via-[rgba(10,8,4,0.45)] to-transparent z-[1] md:block hidden"></div>
@@ -212,8 +224,9 @@ export default function App() {
                 whileTap={{ scale: 0.95 }}
                 href="https://solar-cat.netlify.app/" 
                 className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-9 py-4 rounded-[50px] font-semibold hover:bg-white/20 transition-all flex items-center gap-2"
+                onClick={() => trackEvent('ViewContent', { content_name: 'View Our Products - Hero' })}
               >
-                View Catalogue <ExternalLink size={18} />
+                View Our Products <ExternalLink size={18} />
               </motion.a>
             </div>
           </motion.div>
@@ -298,9 +311,11 @@ export default function App() {
           </div>
           <div className="relative reveal" style={{ transitionDelay: '0.2s' }}>
             <img 
-              src="https://images.unsplash.com/photo-1548337138-e87d889cc369?w=800&q=80" 
+              src="https://images.unsplash.com/photo-1548337138-e87d889cc369?w=600&q=70" 
               alt="Generator Problem" 
               className="w-full h-[400px] object-cover rounded-[20px] transition-transform duration-500 hover:scale-[1.04]"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute bottom-6 left-6 bg-[rgba(26,18,8,0.85)] backdrop-blur-md rounded-[14px] p-[14px_20px] text-white">
               <h4 className="text-[var(--gold)] text-[1.5rem] font-serif">₦200K+</h4>
@@ -322,6 +337,8 @@ export default function App() {
               src="https://raw.githubusercontent.com/mirabelfelix98/My-workflow/main/file_00000000ffc871f59bc5c5871fb20633%20(1).png" 
               alt="02Best Solar Logo" 
               className="w-full md:w-[80%] lg:w-[65%] max-w-[520px] mx-auto my-8 drop-shadow-[0_8px_24px_rgba(200,130,0,0.18)]"
+              loading="lazy"
+              decoding="async"
             />
             <p className="max-w-[800px] mx-auto text-[var(--text-muted)]">
               We are Nigeria's most versatile solar energy company. We supply and install ALL the top solar brands — Deye, Felicity Solar, Firman, BRead, itel Energy, EOS, ColaSolar, Haisic, and more. Whatever brand fits your budget or preference, we have it in stock, ready to install.
@@ -359,6 +376,8 @@ export default function App() {
               src="https://raw.githubusercontent.com/mirabelfelix98/My-workflow/main/InShot_20260227_134511171.jpg" 
               alt="Solar Products" 
               className="w-full h-[500px] object-cover rounded-[24px] shadow-[0_30px_80px_rgba(0,0,0,0.15)] transition-transform duration-500 hover:scale-[1.03]"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="reveal" style={{ transitionDelay: '0.2s' }}>
@@ -385,9 +404,9 @@ export default function App() {
               <a 
                 href="https://solar-cat.netlify.app/" 
                 className="bg-[var(--sun)] text-white px-9 py-4 rounded-[50px] font-semibold hover:bg-[var(--amber)] hover:-translate-y-[3px] transition-all"
-                onClick={() => trackEvent('ViewContent', { content_name: 'Browse Full Catalogue' })}
+                onClick={() => trackEvent('ViewContent', { content_name: 'Browse Full Products' })}
               >
-                Browse Full Catalogue →
+                Browse Full Products →
               </a>
               <a 
                 href="https://app.wamation.com.ng/formframe?formid=a0253711b742349" 
@@ -403,7 +422,7 @@ export default function App() {
 
       {/* Cinematic Feature Block */}
       <section id="feature" className="bg-[var(--deep)] text-white text-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80')] bg-cover bg-center opacity-15 z-0"></div>
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=60')] bg-cover bg-center opacity-15 z-0"></div>
         <div className="container relative z-[1]">
           <span className="section-tag !text-[var(--gold)]">Why Choose Us</span>
           <h2 className="text-white mb-5">Every Brand. One <span className="italic text-[var(--gold)]">Trusted</span> Supplier.</h2>
@@ -511,9 +530,11 @@ export default function App() {
           </div>
           <div className="reveal" style={{ transitionDelay: '0.2s' }}>
             <img 
-              src="https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?w=700&q=80" 
+              src="https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?w=600&q=70" 
               alt="Trust" 
               className="w-full h-auto object-cover rounded-[24px] border-2 border-[rgba(200,140,30,0.15)] shadow-[0_20px_60px_rgba(0,0,0,0.1)]"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>
@@ -535,6 +556,8 @@ export default function App() {
               src="https://raw.githubusercontent.com/mirabelfelix98/My-workflow/main/Screenshot_20260316_143649_Word.jpg" 
               alt="CAC Certificate" 
               className="w-full max-w-[600px] rounded-[12px] mx-auto"
+              loading="lazy"
+              decoding="async"
             />
             <div className="grid sm:grid-cols-3 gap-[15px] mt-[30px]">
               {[
