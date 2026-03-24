@@ -139,7 +139,7 @@ export default function App() {
           href="https://app.wamation.com.ng/formframe?formid=a0253711b742349" 
           className="hidden md:block bg-[var(--sun)] text-white px-[22px] py-[9px] rounded-[30px] font-semibold text-[0.82rem] tracking-[0.05em] uppercase shadow-[0_4px_12px_rgba(232,160,32,0.2)] hover:bg-[var(--amber)] hover:-translate-y-[1px] hover:shadow-[0_6px_18px_rgba(232,160,32,0.3)] transition-all"
         >
-          Get Quote
+          Start My 24-Hour Power Journey
         </a>
         <div className="flex flex-col gap-[5px] cursor-pointer z-[1001]" onClick={toggleMenu}>
           <span className={`w-[25px] h-[2.5px] bg-[var(--charcoal)] transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-[7.5px]' : ''}`}></span>
@@ -203,9 +203,9 @@ export default function App() {
                 whileTap={{ scale: 0.95 }}
                 href="https://app.wamation.com.ng/formframe?formid=a0253711b742349" 
                 className="bg-[var(--sun)] text-white px-9 py-4 rounded-[50px] font-semibold hover:bg-[var(--amber)] shadow-[0_10px_30px_rgba(232,160,32,0.3)] transition-all flex items-center gap-2"
-                onClick={() => trackEvent('Lead', { content_name: 'Get Free Quote - Hero' })}
+                onClick={() => trackEvent('Lead', { content_name: 'Place Your Order Now - Hero' })}
               >
-                Get Free Quote Today <ArrowRight size={18} />
+                Place Your Order Now <ArrowRight size={18} />
               </motion.a>
               <motion.a 
                 whileHover={{ scale: 1.05 }}
@@ -392,9 +392,9 @@ export default function App() {
               <a 
                 href="https://app.wamation.com.ng/formframe?formid=a0253711b742349" 
                 className="bg-[rgba(255,255,255,0.12)] text-[var(--text)] border-2 border-[rgba(200,140,30,0.15)] px-9 py-4 rounded-[50px] font-semibold hover:bg-[rgba(255,255,255,0.25)] transition-all"
-                onClick={() => trackEvent('Lead', { content_name: 'Get Free Quote Products Section' })}
+                onClick={() => trackEvent('Lead', { content_name: 'End My NEPA Problem Now Products Section' })}
               >
-                Get a Free Quote
+                End My NEPA Problem Now →
               </a>
             </div>
           </div>
