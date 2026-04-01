@@ -15,6 +15,15 @@ export default function App() {
   const heroImgRef = useRef<HTMLImageElement>(null);
   const parallaxRef = useRef({ mouseX: 0, mouseY: 0, currentX: 0, currentY: 0 });
 
+  // Track ViewContent on load
+  useEffect(() => {
+    const hasFired = sessionStorage.getItem('fb_view_content_fired');
+    if (!hasFired && window.fbq) {
+      window.fbq('track', 'ViewContent');
+      sessionStorage.setItem('fb_view_content_fired', 'true');
+    }
+  }, []);
+
   // Handle Scroll (Throttled)
   useEffect(() => {
     let ticking = false;
@@ -148,6 +157,7 @@ export default function App() {
         <a 
           href="https://app.wamation.com.ng/formframe?formid=a0253711b742349" 
           className="hidden md:block bg-[var(--sun)] text-white px-[22px] py-[9px] rounded-[30px] font-semibold text-[0.82rem] tracking-[0.05em] uppercase shadow-[0_4px_12px_rgba(232,160,32,0.2)] hover:bg-[var(--amber)] hover:-translate-y-[1px] hover:shadow-[0_6px_18px_rgba(232,160,32,0.3)] transition-all"
+          onClick={() => trackEvent('Lead', { content_name: 'Start My 24-Hour Power Journey - Nav' })}
         >
           Start My 24-Hour Power Journey
         </a>
@@ -622,7 +632,15 @@ export default function App() {
                   📞 Call: +234 704 241 9406
                 </a>
               </li>
-              <li><a href="https://wa.link/g9xdzn" className="text-[rgba(255,255,255,0.55)] text-[0.9rem] hover:text-[var(--sun)]">💬 WhatsApp Us</a></li>
+              <li>
+                <a 
+                  href="https://wa.link/g9xdzn" 
+                  className="text-[rgba(255,255,255,0.55)] text-[0.9rem] hover:text-[var(--sun)]"
+                  onClick={() => trackEvent('Contact', { content_name: 'Footer WhatsApp' })}
+                >
+                  💬 WhatsApp Us
+                </a>
+              </li>
               <li>
                 <a 
                   href="mailto:Oladunjoyeabiola2@gmail.com" 
